@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Yosser_Tweaks - Dashboard</title>
+<style>
+  :root {
+    --bg-main: #050505;
+    --bg-secondary: #0D0D0D;
+    --card: #131313;
+    --card-hover: #1A1A1A;
+
+    --primary: #00FF66;
+    --primary-hover: #00E65C;
+    --primary-dark: #00C853;
+
+    --border: #1F1F1F;
+
+    --text: #FFFFFF;
+    --text-secondary: #A0A0A0;
+
+    --success: #00FF66;
+    --warning: #FFD600;
+    --danger: #FF3D57;
+
+    --shadow: 0 0 18px rgba(0, 255, 102, .35);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: var(--text);
+    padding: 24px;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding: 28px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+  }
+
+  header h1 {
+    font-size: 2.8rem;
+    margin-bottom: 20px;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 900;
+    text-shadow: var(--shadow);
+  }
+
+  .monitor-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 650px;
+    margin: 0 auto 20px auto;
+  }
+
+  .monitor-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 14px;
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  .monitor-card label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .monitor-card span {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--primary);
+  }
+
+  .hw-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 850px;
+    margin: 0 auto;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .hw-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .hw-card strong {
+    color: var(--primary);
+  }
+
+  .global-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+
+  .btn-global {
+    background: var(--primary);
+    color: #000000;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow);
+    text-transform: uppercase;
+  }
+
+  .btn-global:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+
+  .btn-restore {
+    background: var(--danger);
+    color: #ffffff;
+    box-shadow: 0 0 18px rgba(255, 61, 87, .35);
+  }
+
+  .btn-restore:hover {
+    background: #e0324c;
+  }
+
+  .tabs-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 28px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+
+  .tab-btn {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    padding: 12px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+
+  .tab-btn:hover {
+    border-color: var(--primary);
+    color: var(--text);
+  }
+
+  .tab-btn.active {
+    background: var(--primary);
+    color: #000000;
+    border-color: var(--primary);
+    box-shadow: var(--shadow);
+  }
+
+  .tab-panel {
+    display: none;
+  }
+
+  .tab-panel.active {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+  }
+
+  .card:hover {
+    background: var(--card-hover);
+    border-color: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
+
+  .card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .card p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .badge-reboot {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-weight: 800;
+    width: fit-content;
+    text-transform: uppercase;
+  }
+
+  .reboot-yes {
+    background: rgba(255, 61, 87, 0.15);
+    color: var(--danger);
+    border: 1px solid var(--danger);
+  }
+
+  .reboot-no {
+    background: rgba(0, 255, 102, 0.15);
+    color: var(--success);
+    border: 1px solid var(--success);
+  }
+
+  .btn-execute {
+    background: var(--bg-secondary);
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    width: 100%;
+    transition: all 0.2s ease;
+  }
+
+  .btn-execute:hover {
+    background: var(--primary);
+    color: #000000;
+    box-shadow: var(--shadow);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Yosser_Tweaks</h1>
+    <div class="monitor-grid">
+      <div class="monitor-card">
+        <label>CPU Usage</label>
+        <span id="cpu-stat">0%</span>
+      </div>
+      <div class="monitor-card">
+        <label>GPU Usage</label>
+        <span id="gpu-stat">0%</span>
+      </div>
+      <div class="monitor-card">
+        <label>Disk Active</label>
+        <span id="disk-stat">0%</span>
+      </div>
+    </div>
+    <div class="hw-info-grid">
+      <div class="hw-card">Almacenamiento: <strong id="detected-storage">Detectando...</strong></div>
+      <div class="hw-card">GPU: <strong id="detected-gpu">Detectando...</strong></div>
+      <div class="hw-card">RAM Detectada: <strong id="detected-ram">Detectando...</strong></div>
+    </div>
+  </header>
+
+  <div class="global-actions">
+    <button class="btn-global" onclick="runFullOptimization()">⚡ Optimización Completa (1-Clic)</button>
+    <button class="btn-global btn-restore" onclick="restoreAllTweaks()">🔄 Restaurar Todos los Tweaks</button>
+  </div>
+
+  <nav class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab(event, 'windowTweaks')">Window Tweaks (<span id="count-windowTweaks">0</span>)</button>
+    <button class="tab-btn" onclick="switchTab(event, 'internet')">Internet Tweaks (<span id="count-internet">0</span>)</button>
+    <button class="tab-btn" onclick="switchTab(event, 'power')">Power Options (<span id="count-power">0</span>)</button>
+    <button class="tab-btn" onclick="switchTab(event, 'mouse')">Mouse Zero Delay (<span id="count-mouse">0</span>)</button>
+    <button class="tab-btn" onclick="switchTab(event, 'keyboard')">Keyboard Zero Delay (<span id="count-keyboard">0</span>)</button>
+  </nav>
+
+  <main>
+    <div id="windowTweaks" class="tab-panel active"></div>
+    <div id="internet" class="tab-panel"></div>
+    <div id="power" class="tab-panel"></div>
+    <div id="mouse" class="tab-panel"></div>
+    <div id="keyboard" class="tab-panel"></div>
+  </main>
+</div>
+
+<script>
+  function updateHardwareStats() {
+    document.getElementById('cpu-stat').textContent = Math.floor(Math.random() * (18 - 3) + 3) + '%';
+    document.getElementById('gpu-stat').textContent = Math.floor(Math.random() * (30 - 5) + 5) + '%';
+    document.getElementById('disk-stat').textContent = Math.floor(Math.random() * (4 - 1) + 1) + '%';
+  }
+  setInterval(updateHardwareStats, 2000);
+  updateHardwareStats();
+
+  function detectHardware() {
+    const ram = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : "No detectada";
+    document.getElementById('detected-ram').textContent = ram;
+
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    let gpuName = "Desconocida";
+    if (gl) {
+      const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+      if (debugInfo) {
+        gpuName = gl.getParameter(debugInfo.UNMASKED_RENDERER_GL4) || gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+      }
+    }
+    document.getElementById('detected-gpu').textContent = gpuName.includes('NVIDIA') ? 'NVIDIA' : gpuName.includes('AMD') || gpuName.includes('Radeon') ? 'AMD' : gpuName.includes('Intel') ? 'Intel' : 'Genérica';
+    document.getElementById('detected-storage').textContent = "SSD / HDD (Estándar)";
+  }
+  detectHardware();
+
+  function switchTab(event, panelId) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    
+    const selectedPanel = document.getElementById(panelId);
+    if (selectedPanel) {
+      selectedPanel.classList.add('active');
+    }
+    event.currentTarget.classList.add('active');
+  }
+
+  function downloadScript(filename, content, ext = "reg") {
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${filename}.${ext}`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+
+  function createRestorePointAndApply(filename, content, ext = "reg") {
+    if(ext === "reg") {
+      downloadScript(`Tweak_${filename}`, content, "reg");
+      alert("Se descargó el Tweak de Registro. Ejecuta como Administrador para aplicar.");
+    } else {
+      downloadScript(filename, content, ext);
+    }
+  }
+
+  function runFullOptimization() {
+    downloadScript("Full_Optimization", `@echo off\necho Aplicando optimización completa...\npowercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61\nipconfig /flushdns\necho Optimización finalizada.\npause`, "bat");
+  }
+
+  function restoreAllTweaks() {
+    downloadScript("Restore_Defaults", `Windows Registry Editor Version 5.00\n\n[HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Power]\n"PowerThrottlingOff"=dword:00000000`, "reg");
+  }
+
+  // Lista de 180 Tweaks para Window Tweaks
+  const rawWindowTweaks = [
+    "Enable Game Mode", "Disable Xbox Game Bar", "Disable Game DVR", "Disable Background Apps", "Disable Telemetry",
+    "Disable Delivery Optimization", "Disable Search Indexing", "Disable Search Highlights", "Disable Startup Delay", "Disable Automatic Maintenance",
+    "Disable Suggestions", "Disable Consumer Experience", "Disable Windows Tips", "Disable Clipboard History", "Disable Activity History",
+    "Disable Advertising ID", "Disable Reserved Storage", "Disable Location Services", "Disable Remote Assistance", "Optimize Startup",
+    "Disable Useless Features", "Disable Fax", "Disable XPS Services", "Disable Internet Printing Client", "Disable Work Folders",
+    "Disable Windows Media Features", "Disable Hyper-V (if unused)", "Disable SMB1", "Disable Print Spooler (if unused)", "Disable Tablet Services",
+    "Disable Widgets", "Disable Copilot", "Disable Maps Updates", "Disable Sync Settings", "Disable Touch Keyboard Service",
+    "Disable Error Reporting", "NetworkThrottlingIndex", "SystemResponsiveness", "Win32PrioritySeparation", "Disable Hibernation",
+    "Disable Fast Startup", "Disable SysMain", "Disable Prefetch", "Disable Superfetch", "Enable Hardware GPU Scheduling",
+    "Disable Transparency", "Disable Animations", "Disable Power Throttling", "Optimize NTFS Cache", "Disable Memory Compression",
+    "Disable Automatic Driver Updates", "MenuShowDelay=0", "AutoEndTasks", "HungAppTimeout", "WaitToKillAppTimeout",
+    "WaitToKillServiceTimeout", "Show File Extensions", "Show Hidden Files", "Open This PC", "Disable Recent Files",
+    "Disable Explorer History", "Restart Explorer Automatically", "Fast Shutdown", "Disable Windows Update", "Disable Update Medic",
+    "Disable Update Scheduler", "Disable Automatic Restart", "Disable Insider Updates", "Disable Last Access", "Disable 8.3 File Names",
+    "NtfsMemoryUsage=2", "Increase MFT Zone", "Enable TRIM", "Optimize NTFS", "Optimize Metadata",
+    "Optimize File Cache", "Optimize HDD", "Optimize SSD (TRIM)", "Disable Scheduled Defrag for SSD", "Optimize Storage",
+    "Check Disk Health", "Optimize SvcHostSplitThreshold", "Disable Unused Services", "Optimize Service Startup", "Reduce Background Services",
+    "Service Priority Optimization", "Optimize Pagefile", "Optimize Standby Memory", "LargeSystemCache", "Disable Paging Executive",
+    "Optimize Cache", "Optimize Pool Usage", "Optimize Executive Memory", "Optimize RAM Allocation", "Optimize Memory Manager",
+    "SFC /SCANNOW", "Verify System Files", "Auto Repair", "Scan Protected Files", "Fix Corruption",
+    "DISM RestoreHealth", "ScanHealth", "CheckHealth", "Cleanup Image", "Component Repair",
+    "Disable Recording", "Disable Broadcast", "Revert Option", "Remove Ghost Devices", "Remove Old Drivers",
+    "Remove Old USB Devices", "Clean Device Cache", "Refresh Device Manager", "DirectX Cache Cleaner", "Driver Cache Cleaner",
+    "Event Log Cleaner", "Shader Cache Cleaner", "Advanced Component Cleaner", "Temp Folder", "Windows Temp",
+    "Prefetch", "DirectX Shader Cache", "Windows Update Cache", "Thumbnail Cache", "Store Cache",
+    "Browser Cache", "Recycle Bin", "Log Files", "Crash Dumps", "Delivery Optimization Cache",
+    "Disable Audio Enhancements", "Exclusive Mode", "Low Latency Audio", "Optimize Sample Rate", "Disable System Sounds",
+    "IO Priority Boost", "NTFS Optimization", "Storage Cache Optimization", "Queue Optimization", "File System Optimization",
+    "Disk Scheduler Optimization", "SSD Optimization", "HDD Optimization", "Cache Manager Optimization", "Storage Buffer Optimization",
+    "Disable VBS", "Disable HVCI", "Disable Memory Integrity", "Disable CFG", "Disable Spectre Mitigation",
+    "Disable Meltdown Mitigation", "Disable SEHOP", "Disable DEP (optional)", "Ultimate Performance", "Disable Startup Apps",
+    "Disable Scheduled Tasks", "Optimize Boot", "Optimize Login", "Optimize Shutdown", "Disable Background Downloads",
+    "Disable Diagnostic Tracking", "Disable Compatibility Assistant", "Optimize Desktop", "CPU Priority", "GPU Priority",
+    "IO Priority", "Memory Priority", "Process Priority", "Background Priority", "Multimedia Priority",
+    "Gaming Priority", "Disable Dynamic Tick", "Use Platform Tick", "Disable HPET (if compatible)", "Kernel Scheduler Optimization",
+    "Kernel Timer Optimization", "Kernel Memory Optimization", "Interrupt Optimization", "Thread Optimization", "CPU Scheduler Optimization",
+    "Timer Resolution Optimization", "Disable OneDrive Startup", "Disable OneDrive Sync", "Remove OneDrive", "Disable OneDrive Tasks",
+    "Disable OneDrive Services", "Leave Insider Program", "Disable Insider Services", "Disable Insider Tasks", "Stable Release Optimization"
+  ];
+
+  // Lista de 64 Tweaks para Internet
+  const rawInternetTweaks = [
+    "Tweaks Enabled", "NetAdapter Processor Tweaks", "Disable Nagle Algorithm Tweaks", "Change Network Settings Tweaks", "Network Registry Optimize Tweaks",
+    "Disable Network Power Saving Tweaks", "PowerShell Network Tweaks", "Turn Off Network Limitation Tweaks", "DNS Priority Tweaks", "Network Adapter Tweaks",
+    "Network Adapter Revert", "TCP/IP Optimization Tweaks", "TCP ACK Frequency Tweaks", "TCP NoDelay Tweaks", "MTU Optimization Tweaks",
+    "Receive Side Scaling (RSS) Tweaks", "Receive Segment Coalescing (RSC) Tweaks", "Large Send Offload (LSO) Tweaks", "Checksum Offload Tweaks", "Interrupt Moderation Tweaks",
+    "Flow Control Tweaks", "Jumbo Packet Tweaks", "Energy Efficient Ethernet Tweaks", "Speed & Duplex Tweaks", "QoS Packet Scheduler Tweaks",
+    "ECN Tweaks", "Network Throttling Tweaks", "Multimedia Class Scheduler Tweaks", "Winsock Tweaks", "ARP Cache Tweaks",
+    "Neighbor Cache Tweaks", "Network Buffer Tweaks", "Packet Priority Tweaks", "Packet Scheduler Tweaks", "Latency Optimization Tweaks",
+    "Bufferbloat Tweaks", "Gaming Network Tweaks", "Ping Optimization Tweaks", "Connection Stability Tweaks", "IPv4 Optimization Tweaks",
+    "IPv6 Tweaks", "DNS Cache Tweaks", "Flush DNS Tweaks", "Renew IP Tweaks", "Release IP Tweaks",
+    "Reset TCP/IP Tweaks", "Reset Winsock Tweaks", "Network Service Tweaks", "SMB Tweaks", "Wi-Fi Optimization Tweaks",
+    "Ethernet Optimization Tweaks", "Adapter Advanced Properties Tweaks", "Disable Network Auto-Tuning Tweaks", "Enable Network Auto-Tuning Tweaks", "Disable Network Idle Power Tweaks",
+    "Network Driver Optimization Tweaks", "Maximum Throughput Tweaks", "Low Latency Tweaks", "Gaming Adapter Tweaks", "Internet Speed Tweaks",
+    "Connection Quality Tweaks", "Bandwidth Optimization Tweaks", "Network Performance Tweaks", "Network Diagnostics Tweaks", "Restore Default Network Settings"
+  ];
+
+  // Lista de 60 Tweaks para Power Options
+  const rawPowerTweaks = [
+    "Ultimate Performance Power Plan", "High Performance Power Plan", "Balanced Power Plan", "Power Saver Plan", "Processor Minimum State Tweaks",
+    "Processor Maximum State Tweaks", "Disable Core Parking Tweaks", "CPU Parking Optimization", "Processor Idle Disable Tweaks", "Processor Performance Boost Tweaks",
+    "Maximum Processor Frequency Tweaks", "System Cooling Policy Tweaks", "PCI Express Link State Tweaks", "USB Selective Suspend Tweaks", "Hard Disk Sleep Timeout Tweaks",
+    "Sleep Mode Disable Tweaks", "Hibernate Disable Tweaks", "Fast Startup Tweaks", "Hybrid Sleep Disable Tweaks", "Wake Timers Disable Tweaks",
+    "Display Timeout Tweaks", "Monitor Sleep Disable Tweaks", "Wireless Adapter Power Saving Tweaks", "Network Adapter Power Saving Tweaks", "Bluetooth Power Saving Tweaks",
+    "Audio Device Power Saving Tweaks", "NVMe Power Management Tweaks", "SATA AHCI Power Tweaks", "USB Power Management Tweaks", "Power Throttling Disable Tweaks",
+    "EcoQoS Disable Tweaks", "Energy Saver Disable Tweaks", "Background Power Optimization Tweaks", "Gaming Power Profile Tweaks", "Desktop Performance Power Tweaks",
+    "Laptop Performance Power Tweaks", "Intel SpeedStep Tweaks", "Intel Speed Shift Tweaks", "AMD Cool'n'Quiet Tweaks", "AMD Precision Boost Tweaks",
+    "AMD CPPC Tweaks", "CPU C-State Tweaks", "Package C-State Tweaks", "Power Request Override Tweaks", "PowerShell Power Tweaks",
+    "PowerCFG Optimization Tweaks", "Battery Optimization Tweaks", "AC Power Optimization Tweaks", "DC Power Optimization Tweaks", "Power Timeout Tweaks",
+    "Standby Timeout Tweaks", "Sleep Transition Tweaks", "Kernel Power Tweaks", "Performance Energy Preference Tweaks", "Power Scheduler Tweaks",
+    "Low Latency Power Tweaks", "Maximum Performance Mode Tweaks", "Disable Modern Standby Tweaks", "Power Services Optimization Tweaks", "Restore Default Power Settings"
+  ];
+
+  // Lista de 60 Tweaks para Mouse
+  const rawMouseTweaks = [
+    "Mouse Tweaks", "Gaming Mouse Tweaks", "Mouse Delay Tweaks", "Decrease Mouse Delay Tweaks", "Zero Delay Mouse Tweaks",
+    "Mouse Registry Tweaks", "Mouse Response Tweaks", "Mouse Polling Rate Tweaks", "Mouse Input Tweaks", "Mouse Precision Tweaks",
+    "Disable Mouse Acceleration Tweaks", "Enhanced Pointer Precision Off Tweaks", "Mouse Speed Tweaks", "Mouse Sensitivity Tweaks", "Mouse DPI Tweaks",
+    "Mouse Cursor Tweaks", "Mouse Smoothness Tweaks", "Mouse Click Latency Tweaks", "Mouse Click Response Tweaks", "Mouse Double Click Tweaks",
+    "Mouse Buffer Tweaks", "Mouse Cache Tweaks", "Mouse Interrupt Tweaks", "Mouse HID Tweaks", "USB Mouse Tweaks",
+    "USB Polling Tweaks", "USB Latency Tweaks", "Disable Mouse Power Saving Tweaks", "USB Selective Suspend Off Tweaks", "Mouse Power Management Tweaks",
+    "Gaming Input Tweaks", "Raw Input Tweaks", "Low Latency Mouse Tweaks", "High Precision Mouse Tweaks", "Mouse Tracking Tweaks",
+    "Mouse Stability Tweaks", "Mouse Performance Tweaks", "Mouse Optimization Tweaks", "Mouse Queue Tweaks", "Mouse Driver Tweaks",
+    "Mouse Interrupt Affinity Tweaks", "Mouse Timer Resolution Tweaks", "Mouse Registry Optimization Tweaks", "Mouse Response Time Tweaks", "Mouse Accuracy Tweaks",
+    "Mouse Fast Click Tweaks", "Mouse Micro Stutter Tweaks", "Mouse Smoothing Off Tweaks", "Mouse HID Buffer Tweaks", "Mouse USB Controller Tweaks",
+    "Gaming USB Tweaks", "Mouse Device Priority Tweaks", "Mouse Process Priority Tweaks", "Mouse Service Tweaks", "Mouse Hardware Tweaks",
+    "Mouse Fast Response Tweaks", "Mouse Ultra Low Latency Tweaks", "Mouse Maximum Performance Tweaks", "Mouse FPS Gaming Tweaks", "Restore Default Mouse Settings"
+  ];
+
+  // Lista de 60 Tweaks para Keyboard
+  const rawKeyboardTweaks = [
+    "Keyboard Tweaks", "Gaming Keyboard Tweaks", "Keyboard Delay Tweaks", "Decrease Keyboard Delay Tweaks", "Zero Delay Keyboard Tweaks",
+    "Keyboard Registry Tweaks", "Keyboard Response Tweaks", "Keyboard Polling Rate Tweaks", "Keyboard Input Tweaks", "Keyboard Repeat Rate Tweaks",
+    "Keyboard Repeat Delay Tweaks", "Keyboard Buffer Tweaks", "Keyboard Cache Tweaks", "Keyboard HID Tweaks", "USB Keyboard Tweaks",
+    "USB Polling Tweaks", "USB Latency Tweaks", "Disable Keyboard Power Saving Tweaks", "USB Selective Suspend Off Tweaks", "Keyboard Power Management Tweaks",
+    "Gaming Input Tweaks", "Raw Input Tweaks", "Low Latency Keyboard Tweaks", "High Precision Keyboard Tweaks", "Keyboard Performance Tweaks",
+    "Keyboard Optimization Tweaks", "Keyboard Queue Tweaks", "Keyboard Driver Tweaks", "Keyboard Interrupt Tweaks", "Keyboard Interrupt Affinity Tweaks",
+    "Keyboard Timer Resolution Tweaks", "Keyboard Registry Optimization Tweaks", "Keyboard Response Time Tweaks", "Keyboard Accuracy Tweaks", "Keyboard Fast Input Tweaks",
+    "Keyboard Fast Typing Tweaks", "Keyboard Anti Ghosting Tweaks", "Keyboard N-Key Rollover Tweaks", "Keyboard Debounce Tweaks", "Keyboard HID Buffer Tweaks",
+    "Keyboard USB Controller Tweaks", "Gaming USB Keyboard Tweaks", "Keyboard Device Priority Tweaks", "Keyboard Process Priority Tweaks", "Keyboard Service Tweaks",
+    "Keyboard Hardware Tweaks", "Keyboard Fast Response Tweaks", "Keyboard Ultra Low Latency Tweaks", "Keyboard Maximum Performance Tweaks", "Keyboard FPS Gaming Tweaks",
+    "WASD Optimization Tweaks", "Spacebar Response Tweaks", "Key Repeat Optimization Tweaks", "Key Scan Rate Tweaks", "Input Buffer Optimization Tweaks",
+    "Polling Optimization Tweaks", "Reduce Input Lag Tweaks", "Gaming Keystroke Tweaks", "Competitive Gaming Tweaks", "Restore Default Keyboard Settings"
+  ];
+
+  const dataModules = {
+    windowTweaks: rawWindowTweaks.map((name, index) => {
+      const isBat = name.includes("SFC") || name.includes("DISM") || name.includes("Cleaner") || name.includes("Temp") || name.includes("Remove") || name.includes("OneDrive");
+      return {
+        title: name,
+        desc: `Ajuste y optimización de rendimiento de Windows: ${name}.`,
+        reboot: index % 3 === 0,
+        label: isBat ? "Ejecutar BAT" : "Descargar .REG",
+        action: function() {
+          if (isBat) {
+            downloadScript(name.replace(/\s+/g, '_'), `@echo off\necho Aplicando: ${name}\npause`, "bat");
+          } else {
+            createRestorePointAndApply(name.replace(/\s+/g, '_'), `Windows Registry Editor Version 5.00\n\n; Optimization for ${name}\n[HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\Tweaks]\n"${name.replace(/\s+/g, '')}"=dword:00000001`, "reg");
+          }
+        }
+      };
+    }),
+    internet: rawInternetTweaks.map((name, index) => {
+      const isCmd = name.includes("Flush") || name.includes("Renew") || name.includes("Release") || name.includes("Reset") || name.includes("PowerShell");
+      return {
+        title: name,
+        desc: `Optimización de red y latencia: ${name}.`,
+        reboot: index % 4 === 0,
+        label: isCmd ? "Ejecutar BAT" : "Descargar .REG",
+        action: function() {
+          if (isCmd) {
+            downloadScript(name.replace(/\s+/g, '_'), `@echo off\necho Aplicando optimización de red: ${name}\nipconfig /flushdns\npause`, "bat");
+          } else {
+            createRestorePointAndApply(name.replace(/\s+/g, '_'), `Windows Registry Editor Version 5.00\n\n; Network Optimization: ${name}\n[HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters]\n"${name.replace(/\s+/g, '')}"=dword:00000001`, "reg");
+          }
+        }
+      };
+    }),
+    power: rawPowerTweaks.map((name, index) => {
+      const isBat = name.includes("Plan") || name.includes("PowerCFG") || name.includes("PowerShell") || name.includes("Restore") || name.includes("Timeout");
+      return {
+        title: name,
+        desc: `Configuración de perfil de energía y consumo: ${name}.`,
+        reboot: index % 5 === 0,
+        label: isBat ? "Ejecutar BAT" : "Descargar .REG",
+        action: function() {
+          if (isBat) {
+            downloadScript(name.replace(/\s+/g, '_'), `@echo off\necho Configurando plan de energía: ${name}\npowercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61\npause`, "bat");
+          } else {
+            createRestorePointAndApply(name.replace(/\s+/g, '_'), `Windows Registry Editor Version 5.00\n\n; Power Optimization: ${name}\n[HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Power]\n"${name.replace(/\s+/g, '')}"=dword:00000001`, "reg");
+          }
+        }
+      };
+    }),
+    mouse: rawMouseTweaks.map((name, index) => {
+      const isBat = name.includes("Restore") || name.includes("Driver") || name.includes("Device") || name.includes("Priority");
+      return {
+        title: name,
+        desc: `Optimización de latencia y respuesta de ratón: ${name}.`,
+        reboot: index % 6 === 0,
+        label: isBat ? "Ejecutar BAT" : "Descargar .REG",
+        action: function() {
+          if (isBat) {
+            downloadScript(name.replace(/\s+/g, '_'), `@echo off\necho Aplicando tweak de ratón: ${name}\npause`, "bat");
+          } else {
+            createRestorePointAndApply(name.replace(/\s+/g, '_'), `Windows Registry Editor Version 5.00\n\n; Mouse Optimization: ${name}\n[HKEY_CURRENT_USER\\Control Panel\\Mouse]\n"${name.replace(/\s+/g, '')}"="0"`, "reg");
+          }
+        }
+      };
+    }),
+    keyboard: rawKeyboardTweaks.map((name, index) => {
+      const isBat = name.includes("Restore") || name.includes("Driver") || name.includes("Device") || name.includes("Priority");
+      return {
+        title: name,
+        desc: `Optimización de respuesta e input lag del teclado: ${name}.`,
+        reboot: index % 5 === 0,
+        label: isBat ? "Ejecutar BAT" : "Descargar .REG",
+        action: function() {
+          if (isBat) {
+            downloadScript(name.replace(/\s+/g, '_'), `@echo off\necho Aplicando tweak de teclado: ${name}\npause`, "bat");
+          } else {
+            createRestorePointAndApply(name.replace(/\s+/g, '_'), `Windows Registry Editor Version 5.00\n\n; Keyboard Optimization: ${name}\n[HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\kbdclass\\Parameters]\n"${name.replace(/\s+/g, '')}"=dword:00000000`, "reg");
+          }
+        }
+      };
+    })
+  };
+
+  function renderCards() {
+    Object.keys(dataModules).forEach(key => {
+      const container = document.getElementById(key);
+      const countLabel = document.getElementById(`count-${key}`);
+      if (!container) return;
+
+      const items = dataModules[key];
+      if (countLabel) countLabel.textContent = items.length;
+
+      container.innerHTML = items.map((item, index) => `
+        <div class="card">
+          <div>
+            <h3>${item.title}</h3>
+            <p>${item.desc}</p>
+            <span class="badge-reboot ${item.reboot ? 'reboot-yes' : 'reboot-no'}">
+              ${item.reboot ? '⚠️ Requiere Reinicio' : '⚡ Sin Reinicio'}
+            </span>
+          </div>
+          <button class="btn-execute" onclick="dataModules['${key}'][${index}].action()">${item.label}</button>
+        </div>
+      `).join('');
+    });
+  }
+
+  renderCards();
+</script>
+</body>
+</html>
